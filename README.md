@@ -15,10 +15,11 @@ The methodology is split into two distinct phases, each handled by a dedicated c
 
 ## Key Artifacts & Project Structure
 
-This workflow relies on a specific directory structure to organize AI-related artifacts. The goal is to create a "single source of truth" that can be used with different AI tools.
+This workflow relies on a specific directory structure to organize AI-related artifacts and project documentation. The goal is to create a "single source of truth" that can be used with different AI tools.
 
 -   `.ai-rules/`: A tool-agnostic directory containing global "steering" files (`product.md`, `tech.md`, `structure.md`). These provide project-wide context to the AI.
--   `specs/`: Contains feature-specific specification files. Each feature gets its own subdirectory. The entire `specs/your-feature-name/` directory, including its contents, is generated automatically by the **Planner mode**.
+-   `docs/`: Comprehensive project documentation organized by type and feature.
+-   `docs/features/`: Contains feature-specific specification files. Each feature gets its own subdirectory. The entire `docs/features/your-feature-name/` directory, including its contents, is generated automatically by the **Planner mode**.
 
 ```
 .
@@ -26,21 +27,61 @@ This workflow relies on a specific directory structure to organize AI-related ar
 │   ├── product.md      # The "Why": Project vision and goals
 │   ├── tech.md         # The "With What": Tech stack and tools
 │   └── structure.md    # The "Where": File structure and conventions
-└── specs/
-    └── your-feature-name/
-        ├── requirements.md # The "What": User stories & acceptance criteria
-        ├── design.md       # The "How": Technical architecture & components
-        └── tasks.md        # The "To-Do": A step-by-step implementation plan
+├── docs/
+│   ├── README.md       # Quick start and overview only
+│   ├── architecture/   # Core architectural documentation
+│   │   ├── README.md   # Architecture overview & index
+│   │   ├── core-data-model.md
+│   │   ├── asset-management.md
+│   │   ├── deployment-strategy.md
+│   │   └── naming-conventions.md
+│   ├── features/       # Feature-specific documentation
+│   │   ├── README.md   # Feature index
+│   │   └── your-feature-name/
+│   │       ├── requirements.md # The "What": User stories & acceptance criteria
+│   │       ├── design.md       # The "How": Technical architecture & components
+│   │       ├── tasks.md        # The "To-Do": A step-by-step implementation plan
+│   │       └── README.md       # Feature overview & operation
+│   ├── operations/     # Operational guides and procedures
+│   │   ├── README.md   # Operations index
+│   │   ├── deployment-guide.md
+│   │   ├── monitoring.md
+│   │   ├── troubleshooting.md
+│   │   └── configuration-reference.md
+│   └── schemas/        # Data schema documentation
+│       ├── README.md   # Schema overview
+│       ├── bigquery-tables.md
+│       └── unified-transcript.md
+└── specs/              # DEPRECATED - archive only
+    └── _archive/       # Move old specs here
 ```
 
-### Making Rules Tool-Agnostic with Symlinks
+### Documentation-Driven Development
 
-To ensure all your AI tools use the same `.ai-rules/` directory, you can create symbolic links. This allows you to maintain a single, canonical set of rules while satisfying the specific directory requirements of tools like Cursor and Kiro.
+The new documentation structure provides comprehensive context for AI agents and human developers:
+
+#### **Documentation Organization**
+- **`docs/architecture/`**: Core architectural documentation including data models, asset management, deployment strategies, and naming conventions
+- **`docs/features/`**: Feature-specific documentation with required files (`requirements.md`, `design.md`, `tasks.md`) and additional feature-specific documents
+- **`docs/operations/`**: Operational guides including deployment, monitoring, troubleshooting, and configuration reference
+- **`docs/schemas/`**: Data schema documentation including BigQuery tables and unified transcript formats
+
+#### **Benefits of Documentation Context**
+- **Comprehensive Understanding**: AI agents read relevant documentation before planning or executing tasks
+- **Architecture Compliance**: New features align with existing architecture patterns and constraints
+- **Avoid Duplication**: AI agents can identify existing features and avoid recreating functionality
+- **Operational Awareness**: Understanding of deployment and operational constraints
+- **Schema Consistency**: Data models align with existing schemas and formats
+
+### Making Rules and Specs Tool-Agnostic with Symlinks
+
+To ensure all your AI tools use the same `.ai-rules/` directory and `docs/features/` directory, you can create symbolic links. This allows you to maintain a single, canonical set of rules and specifications while satisfying the specific directory requirements of tools like Cursor and Kiro.
 
 **1. Create the target directories (if they don't exist):**
 ```sh
 mkdir -p .cursor
 mkdir -p .kiro
+mkdir -p .kiro/specs
 ```
 
 **2. Create the symbolic links:**
@@ -60,16 +101,18 @@ mklink /D .cursor\\rules ..\\.ai-rules
 ```
 
 #### For Kiro
-This links `.kiro/steering` to your central `.ai-rules` directory.
+This links `.kiro/steering` to your central `.ai-rules` directory and `.kiro/specs` to your central `docs/features` directory.
 
 **On macOS / Linux:**
 ```sh
 ln -s ../.ai-rules .kiro/steering
+ln -s ../docs/features .kiro/specs
 ```
 
 **On Windows (run as Administrator):**
 ```sh
 mklink /D .kiro\\steering ..\\.ai-rules
+mklink /D .kiro\\specs ..\\docs\\features
 ```
 
 ## How to Use: Setting Up the Workflow
@@ -112,6 +155,7 @@ For an existing project, you can use the **Steering Architect** persona to analy
 - **Context:** ✅ Enable "Full folder context"
 - **Tools:** ❌ Disable all tools (Planner should not make code changes)
 - **Automation:** ❌ Disable auto-apply, auto-run, auto-fix (manual review required)
+- **Documentation Context:** The planner will automatically read relevant documentation from `docs/architecture/`, `docs/features/`, `docs/operations/`, and `docs/schemas/` before beginning any planning
 
 **2. Executor Mode (The Engineer)**
 - **Mode Name:** "Executor"
@@ -120,6 +164,7 @@ For an existing project, you can use the **Steering Architect** persona to analy
 - **Context:** ✅ Enable "Full folder context"
 - **Tools:** ✅ Enable all tools (file editing, terminal, etc.)
 - **Automation:** ⚠️ Optional - Enable auto-apply edits, auto-run, and auto-fix errors for autonomous execution
+- **Documentation Context:** The executor will read relevant documentation from `docs/architecture/`, `docs/features/`, `docs/operations/`, and `docs/schemas/` before executing any tasks
 
 **3. Steering Architect Mode**
 - **Mode Name:** "Steering Architect"
@@ -137,7 +182,8 @@ For an existing project, you can use the **Steering Architect** persona to analy
 - **Prompt:** Copy the entire content from `prompts/planner.md`
 - **Context:** ✅ Enable full project context
 - **Tools:** ❌ Disable code generation (planning only)
-- **File Access:** ✅ Enable read/write access to `specs/` directory
+- **File Access:** ✅ Enable read/write access to `docs/features/` directory (or `specs/` if using Kiro symlink)
+- **Documentation Context:** The planner will automatically read relevant documentation from `docs/architecture/`, `docs/features/`, `docs/operations/`, and `docs/schemas/` before beginning any planning
 
 **2. Executor Persona**
 - **Persona Name:** "Executor"
@@ -146,6 +192,7 @@ For an existing project, you can use the **Steering Architect** persona to analy
 - **Context:** ✅ Enable full project context
 - **Tools:** ✅ Enable all development tools
 - **File Access:** ✅ Enable read/write access to all project files
+- **Documentation Context:** The executor will read relevant documentation from `docs/architecture/`, `docs/features/`, `docs/operations/`, and `docs/schemas/` before executing any tasks
 
 **3. Steering Architect Persona**
 - **Persona Name:** "Steering Architect"
@@ -200,14 +247,16 @@ For an existing project, you can use the **Steering Architect** persona to analy
 **Planner Persona Usage:**
 1.  Switch to Planner persona in your chosen AI tool.
 2.  Provide a high-level feature description (e.g., "Add user authentication").
-3.  The Planner will guide you through an interactive process to define `requirements.md`, `design.md`, and `tasks.md` in a new `specs/your-feature-name/` directory.
-4.  Review and approve each step to complete the plan.
+3.  The Planner will automatically read relevant documentation from `docs/architecture/`, `docs/features/`, `docs/operations/`, and `docs/schemas/` to understand the current system context.
+4.  The Planner will guide you through an interactive process to define `requirements.md`, `design.md`, and `tasks.md` in a new `docs/features/your-feature-name/` directory (or `specs/your-feature-name/` if using Kiro symlink).
+5.  Review and approve each step to complete the plan.
 
 **Executor Persona Usage:**
 1.  Switch to Executor persona in your chosen AI tool.
-2.  Provide the path to the `tasks.md` file (e.g., `specs/user-authentication/tasks.md`).
-3.  The Executor will read the first incomplete task, implement it, and update `tasks.md` to mark it as complete.
-4.  Run the Executor repeatedly to work through all tasks in the plan.
+2.  Provide the path to the `tasks.md` file (e.g., `docs/features/user-authentication/tasks.md` or `specs/user-authentication/tasks.md` if using Kiro symlink).
+3.  The Executor will read relevant documentation from `docs/architecture/`, `docs/features/`, `docs/operations/`, and `docs/schemas/` to understand the system context before executing tasks.
+4.  The Executor will read the first incomplete task, implement it, and update `tasks.md` to mark it as complete.
+5.  Run the Executor repeatedly to work through all tasks in the plan.
 
 **Steering Architect Persona Usage:**
 1.  Switch to Steering Architect persona in your chosen AI tool.
@@ -250,6 +299,9 @@ The AI will recognize the persona and follow the interactive process to help you
 
 #### Starting an Executor Session
 Once the specification is complete, you can instruct the AI to start building:
-> You are in **Executor mode**. Go and execute the tasks in `specs/user-authentication/tasks.md`.
+> You are in **Executor mode**. Go and execute the tasks in `docs/features/user-authentication/tasks.md`.
 
 The AI will adopt the engineer persona, read the `tasks.md` file, and begin implementing the feature one task at a time.
+
+**Note:** If using Kiro with the symlink setup, you can also use:
+> You are in **Executor mode**. Go and execute the tasks in `specs/user-authentication/tasks.md`.
