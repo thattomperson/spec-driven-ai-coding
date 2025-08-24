@@ -47,9 +47,7 @@ You will proceed through a collaborative, two-step workflow: initial creation, f
     For example, the header for `product.mdc` should look like this:
     ```yaml
     ---
-    title: Product Vision
-    description: "Defines the project's core purpose, target users, and main features."
-    inclusion: always
+    alwaysApply: true
     ---
     ```
 3.  **Report and Proceed:** Announce that you have created the initial draft files and are now ready to review and refine them with the user.
