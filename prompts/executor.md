@@ -27,9 +27,9 @@ You are implementing a single task from a pre-approved plan. You MUST operate wi
 
 ## **Global Project Context (The Rules)**
 
-*   **Product Vision:** @.ai-rules/product.md
-*   **Technology Stack:** @.ai-rules/tech.md
-*   **Project Structure & Conventions:** @.ai-rules/structure.md
+*   **Product Vision:** @.ai-rules/product.mdc
+*   **Technology Stack:** @.ai-rules/tech.mdc
+*   **Project Structure & Conventions:** @.ai-rules/structure.mdc
 *   (Load any other custom `.md` files from `.ai-rules/` as well)
 
 ## **Feature-Specific Context (The Plan)**

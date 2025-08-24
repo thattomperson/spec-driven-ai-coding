@@ -17,16 +17,16 @@ The methodology is split into two distinct phases, each handled by a dedicated c
 
 This workflow relies on a specific directory structure to organize AI-related artifacts and project documentation. The goal is to create a "single source of truth" that can be used with different AI tools.
 
--   `.ai-rules/`: A tool-agnostic directory containing global "steering" files (`product.md`, `tech.md`, `structure.md`). These provide project-wide context to the AI.
+-   `.ai-rules/`: A tool-agnostic directory containing global "steering" files (`product.mdc`, `tech.mdc`, `structure.mdc`). These provide project-wide context to the AI.
 -   `docs/`: Comprehensive project documentation organized by type and feature.
 -   `docs/features/`: Contains feature-specific specification files. Each feature gets its own subdirectory. The entire `docs/features/your-feature-name/` directory, including its contents, is generated automatically by the **Planner mode**.
 
 ```
 .
 ├── .ai-rules/
-│   ├── product.md      # The "Why": Project vision and goals
-│   ├── tech.md         # The "With What": Tech stack and tools
-│   └── structure.md    # The "Where": File structure and conventions
+│   ├── product.mdc      # The "Why": Project vision and goals
+│   ├── tech.mdc         # The "With What": Tech stack and tools
+│   └── structure.mdc    # The "Where": File structure and conventions
 ├── docs/
 │   ├── README.md       # Quick start and overview only
 │   ├── architecture/   # Core architectural documentation
@@ -132,9 +132,9 @@ If you are starting a new project from scratch, you need to create the steering 
     mkdir -p .ai-rules
     ```
 2.  Create the core files:
-    -   `.ai-rules/product.md`: Describe the project's vision, goals, target audience, and core features. Answer the question: "What are we building and why?"
-    -   `.ai-rules/tech.md`: Outline the technology stack, libraries, frameworks, and coding conventions. Answer the question: "What tools and patterns do we use?"
-    -   `.ai-rules/structure.md`: Explain the project's file and directory structure, and the purpose of key components. Answer the question: "Where does code go?"
+    -   `.ai-rules/product.mdc`: Describe the project's vision, goals, target audience, and core features. Answer the question: "What are we building and why?"
+    -   `.ai-rules/tech.mdc`: Outline the technology stack, libraries, frameworks, and coding conventions. Answer the question: "What tools and patterns do we use?"
+    -   `.ai-rules/structure.mdc`: Explain the project's file and directory structure, and the purpose of key components. Answer the question: "Where does code go?"
 
 #### For an Existing Project (AI-Assisted Setup)
 
@@ -142,7 +142,7 @@ For an existing project, you can use the **Steering Architect** persona to analy
 
 1.  Use the Steering Architect persona in your chosen AI tool.
 2.  Ask the agent to "Create the steering files for this project."
-3.  The agent will analyze your codebase and ask clarifying questions to generate the `product.md`, `tech.md`, and `structure.md` files for you.
+3.  The agent will analyze your codebase and ask clarifying questions to generate the `product.mdc`, `tech.mdc`, and `structure.mdc` files for you.
 
 ### Setting Up the Workflow in Different AI Tools
 
@@ -261,7 +261,7 @@ For an existing project, you can use the **Steering Architect** persona to analy
 **Steering Architect Persona Usage:**
 1.  Switch to Steering Architect persona in your chosen AI tool.
 2.  Ask the agent to "Create the steering files for this project."
-3.  The agent will analyze your codebase and ask you questions to create `product.md`, `tech.md`, and `structure.md`.
+3.  The agent will analyze your codebase and ask you questions to create `product.mdc`, `tech.mdc`, and `structure.mdc`.
 
 ## Generating a Master Context for Other AI Assistants
 

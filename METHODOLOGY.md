@@ -59,9 +59,9 @@ The following table provides a high-level overview of Kiro's complete markdown f
 | requirements.md | Per-feature (e.g., specs/auth/) | Defines user stories and acceptance criteria | "WHAT should be built?" |
 | design.md | Per-feature | Outlines technical architecture and components | "HOW should it be built?" |
 | tasks.md | Per-feature | Provides a step-by-step implementation checklist | "WHAT are the exact steps to build it?" |
-| product.md | .kiro/steering/ | Defines product vision and goals | "WHY are we building this project?" |
-| tech.md | .kiro/steering/ | Documents the technology stack | "WITH WHAT tools will we build it?" |
-| structure.md | .kiro/steering/ | Defines file organization and conventions | "WHERE does the code go?" |
+| product.mdc | .kiro/steering/ | Defines product vision and goals | "WHY are we building this project?" |
+| tech.mdc | .kiro/steering/ | Documents the technology stack | "WITH WHAT tools will we build it?" |
+| structure.mdc | .kiro/steering/ | Defines file organization and conventions | "WHERE does the code go?" |
 | \[custom\].md | .kiro/steering/ | Defines team-specific rules (e.g., API standards) | "WHAT are our specific rules?" |
 
 ### **2.1. requirements.md: Defining the "What" with Unambiguous Precision**
@@ -125,13 +125,13 @@ These crucial files reside in a dedicated .kiro/steering/ directory at the root 
 
 Kiro: Setup Steering for Project command from the command palette, which generates a default set of three files.[^10] Unless configured otherwise, the contents of these files are automatically included as high-priority context in every interaction the developer has with the Kiro agent, ensuring that its behavior is always aligned with the project's established standards.[^21]
 
-### **3.1. The Core Steering Trio: product.md, tech.md, and structure.md**
+### **3.1. The Core Steering Trio: product.mdc, tech.mdc, and structure.mdc**
 
 Kiro establishes a baseline of project understanding through three foundational steering files, each answering a critical question about the project's nature.
 
-* **product.md (The "Why"):** This file defines the high-level vision of the application. It contains information about the product's core purpose, its target users or platforms, its key features, and its overarching business objectives.[^1] By understanding the "why" behind the project, the agent can make more intelligent decisions, suggesting solutions and new features that align with the product's strategic goals rather than just fulfilling a narrow technical request.
-* **tech.md (The "With What"):** This document serves as the definitive record of the project's technology stack. It lists the chosen programming languages, frameworks (e.g., React, Node.js), key libraries and dependencies, development tools, and common commands (e.g., npm test).[^1] This file is essential for maintaining technical consistency. It guides the agent to use the correct tech stack, preventing it from introducing extraneous or incompatible technologies, and enables it to autonomously execute commands for testing, building, or linting the codebase.
-* **structure.md (The "Where"):** This file outlines the project's organizational and architectural conventions. It details the file and folder structure, specifies naming conventions for components and variables, and documents key architectural principles (e.g., "all state management logic resides in the src/store directory").[^1] This context is vital for the agent's ability to navigate the codebase and generate new code that fits seamlessly into the existing structure, maintaining a clean and consistent project architecture.
+* **product.mdc (The "Why"):** This file defines the high-level vision of the application. It contains information about the product's core purpose, its target users or platforms, its key features, and its overarching business objectives.[^1] By understanding the "why" behind the project, the agent can make more intelligent decisions, suggesting solutions and new features that align with the product's strategic goals rather than just fulfilling a narrow technical request.
+* **tech.mdc (The "With What"):** This document serves as the definitive record of the project's technology stack. It lists the chosen programming languages, frameworks (e.g., React, Node.js), key libraries and dependencies, development tools, and common commands (e.g., npm test).[^1] This file is essential for maintaining technical consistency. It guides the agent to use the correct tech stack, preventing it from introducing extraneous or incompatible technologies, and enables it to autonomously execute commands for testing, building, or linting the codebase.
+* **structure.mdc (The "Where"):** This file outlines the project's organizational and architectural conventions. It details the file and folder structure, specifies naming conventions for components and variables, and documents key architectural principles (e.g., "all state management logic resides in the src/store directory").[^1] This context is vital for the agent's ability to navigate the codebase and generate new code that fits seamlessly into the existing structure, maintaining a clean and consistent project architecture.
 
 ### **3.2. Advanced Steering: Customization and Dynamic Context**
 
@@ -155,7 +155,7 @@ The following table outlines the different inclusion modes, which are critical f
 
 To further combat documentation drift and ensure that steering rules remain current, the system supports **dynamic file references**. Using the syntax \#\[\[file:\<relative\_path\_to\_file\>\]\], a steering file can embed a live reference to a source code file.[^21] For example,
 
-structure.md could reference a key configuration file like vite.config.ts to ensure the agent always has the latest build configuration. This turns the steering documents from static text into a living system that is dynamically linked to the state of the codebase itself.
+structure.mdc could reference a key configuration file like vite.config.ts to ensure the agent always has the latest build configuration. This turns the steering documents from static text into a living system that is dynamically linked to the state of the codebase itself.
 
 ## **Section 4: The Extended Ecosystem: Automation and Extensibility**
 
@@ -207,9 +207,9 @@ To ensure you can switch between Kiro and your custom Cursor modes without frict
 At the root of your project, establish two key directories:
 
 * **.ai-rules/**: This directory will serve as the single source of truth for persistent, project-wide context. It will house the core steering files, named according to Kiro's convention:
-  * product.md
-  * tech.md
-  * structure.md
+  * product.mdc
+  * tech.mdc
+  * structure.mdc
   * Any custom rule files (e.g., api-conventions.md, testing-patterns.md).
 * **specs/**: This directory will house the specifications for each feature, with each feature getting its own dedicated subfolder. This modular approach is key to managing complexity.[^15] For example:
   * specs/user-authentication/
@@ -229,7 +229,7 @@ The workflow proceeds as follows:
 
 1. **Feature Scoping and Naming:** The process begins with the developer providing a high-level feature description. The Planner's first action is to ask for a concise, machine-friendly name for the feature (e.g., "user-auth," "product-reviews"). This name is then used to create the dedicated spec subdirectory (e.g., specs/user-auth/), answering the question of how the agent knows where to place the spec files.[^24]
 2. **Iterative Requirement Definition:** The Planner generates a first draft of requirements.md within the new spec folder. Crucially, it does not stop here. It presents the generated user stories and EARS-based acceptance criteria to the developer and asks for feedback. It might pose clarifying questions like, "I've assumed that users must verify their email to log in. Is this correct?" or "Should we consider a 'remember me' functionality?." This loop continues until the developer approves the requirements.
-3. **Collaborative Technical Design:** Once the requirements are finalized, the Planner generates the design.md file. If the agent identifies multiple viable architectural paths based on the project's tech.md and the new requirements, it will present these options to the developer. For example: "For state management, we could use the existing Redux setup or introduce Zustand for this feature, which might be simpler. Pros of Redux are... Cons are... Which approach do you prefer?" This step ensures the developer retains architectural control.
+3. **Collaborative Technical Design:** Once the requirements are finalized, the Planner generates the design.md file. If the agent identifies multiple viable architectural paths based on the project's tech.mdc and the new requirements, it will present these options to the developer. For example: "For state management, we could use the existing Redux setup or introduce Zustand for this feature, which might be simpler. Pros of Redux are... Cons are... Which approach do you prefer?" This step ensures the developer retains architectural control.
 4. **Final Task Generation:** With the design approved, the Planner generates the final tasks.md file, breaking down the agreed-upon design into a granular, actionable checklist.
 
 ### **5.3. The Focused "Executive" Mode: Plan-Driven Implementation**
@@ -261,9 +261,9 @@ This session synthesizes the strategic planning capabilities of your original Pl
 
 You MUST operate within the project's established standards, defined in the following global context files. You will read and internalize these before beginning.
 
-* Product Vision: @.ai-rules/product.md
-* Technology Stack: @.ai-rules/tech.md
-* Project Structure & Conventions: @.ai-rules/structure.md
+* Product Vision: @.ai-rules/product.mdc
+* Technology Stack: @.ai-rules/tech.mdc
+* Project Structure & Conventions: @.ai-rules/structure.mdc
 * (Load any other custom.md files from.ai-rules/ as well)
 
 # **WORKFLOW:**
@@ -316,9 +316,9 @@ You are implementing a single task from a pre-approved plan. You MUST operate wi
 
 ## **Global Project Context (The Rules):**
 
-* Product Vision: @.ai-rules/product.md
-* Technology Stack: @.ai-rules/tech.md
-* Project Structure & Conventions: @.ai-rules/structure.md
+* Product Vision: @.ai-rules/product.mdc
+* Technology Stack: @.ai-rules/tech.mdc
+* Project Structure & Conventions: @.ai-rules/structure.mdc
 * (Load any other custom.md files from.ai-rules/ as well)
 
 # **TASK:**

@@ -65,9 +65,9 @@ This session is for strategic planning using a rigorous, spec-driven methodology
 You MUST operate within the project's established standards, defined in the following global context files. You will read and internalize these before beginning.
 
 ### **Global Project Context (The Rules)**
-*   Product Vision: @.ai-rules/product.md
-*   Technology Stack: @.ai-rules/tech.md
-*   Project Structure & Conventions: @.ai-rules/structure.md
+*   Product Vision: @.ai-rules/product.mdc
+*   Technology Stack: @.ai-rules/tech.mdc
+*   Project Structure & Conventions: @.ai-rules/structure.mdc
 *   (Load any other custom.md files from .ai-rules/ as well)
 
 ### **Documentation Context (Required Reading)**
